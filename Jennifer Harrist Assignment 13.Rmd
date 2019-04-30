@@ -1,0 +1,73 @@
+---
+title: "HSB2 Data Analysis"
+author: "Jennifer Harrist"
+output: html_notebook
+---
+## Introduction
+
+**The purpose of our research is to investigate the relationship between various variables and student achievement scores in reading, math, and science More specifically, we examine (a) whether a student’s scores in reading and math are related and to what extent this relationship is influenced by socioeconomic status, (b) whether gender impacts a student’s reading and math scores, (c) whether a relationship between race and reading scores exist and to what extent this relationship is influenced by socioeconomic status. Our sample consists of 200 students from different socio-economic backgrounds (low, middle, high) and different ethnicities (White, Hispanic, African-American, Asian).**
+
+We will begin by loading in our data and setting *SES* as a factor.
+
+```{r include = FALSE}
+
+library(tidyverse)
+hsb2 <- read_csv("hsb2.csv")
+hsb2
+
+SES <- factor(hsb2$ses, 
+              levels = c("1", "2", "3"),
+              labels = c("low", "middle" ,"high"))
+```
+
+## Analysis
+
+Reading is a foundational tool that is required in all content areas. As such, the
+instruction of mathematics has changed from being able to compute an algorithm to 
+reading and decoding word problems in order to construct the algorithm needed. 
+Therefore, It is assumed that a student’s reading ability will be positively related 
+to their math scores. 
+
+Hypothesis 1 is proposed: 
+H1: Students’ reading score will positively influence to their math scores.
+
+```{r}
+p1 <- ggplot(hsb2, aes(x = read, y = math))
+
+p2 <- p1 + geom_point() +
+  stat_smooth(method = "lm", fullrange = TRUE, level = 0.70) +
+  labs(x = "Reading Scores",
+       y = "Math Scores",
+       title = "Influence of Math Scores by Reading Scores by SES ",
+       caption = "Figure 1: The influence of reading on math scores")
+p2
+```
+
+In considering H1, a positive relationship exists between reading and math scores, as
+seen in Figure 1. Therefore, hypothesis 1 is supported. As reading scores increase,
+math scores increase. 
+
+Where reading ability can have a positive influence on math scores, it is assumed 
+that differences in SES will influence overall relationship between reading and math 
+scores.
+
+```{r}
+
+p3 <- ggplot(hsb2, aes(x = read, y = math, color = SES))
+p4 <- p3 + geom_point() +
+  stat_smooth(method= "lm", level = 0.70, fullrange = TRUE) + 
+  labs(x = "Reading Scores",
+       y = "Math Scores",
+       title = "Influence of Math Scores by Reading Scores Grouped by SES ",
+       caption = "Figure 2: The influence of reading on math scores separated 
+       by SES")
+p4
+```
+
+## Conclusions
+
+A positive relationship for math by reading scores is evident, regardless of student 
+SES. Figure 2 indicates that while a positive relationship exists in all SES 
+categories, there are different ability levels between the groups, though the difference between them is small. Ability levels are evident between the SES groups, with low
+SES having the lowest scores.
+
